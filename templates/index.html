@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArQoda - Générateur de QR code artistique</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>ArQoda</h1>
+        <p class="subtitle">Créez des QR codes uniques avec votre logo</p>
+        <form id="qrForm">
+            <div class="form-group">
+                <label for="data">Texte ou URL :</label>
+                <input type="text" id="data" name="data" placeholder="https://exemple.com" required>
+            </div>
+            <div class="form-group">
+                <label for="dynamic">
+                    <input type="checkbox" id="dynamic" name="dynamic"> Rendre dynamique (crée un lien court)
+                </label>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="fgcolor">Couleur des points :</label>
+                    <input type="color" id="fgcolor" name="fgcolor" value="#000000">
+                </div>
+                <div class="form-group">
+                    <label for="bgcolor">Couleur de fond :</label>
+                    <input type="color" id="bgcolor" name="bgcolor" value="#ffffff">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="logo">Logo (optionnel, max 2 Mo) :</label>
+                <input type="file" id="logo" name="logo" accept="image/*">
+            </div>
+
+            <button type="button" id="generateRoundBtn">Générer QR points ronds + logo centré</button>
+            <button type="button" id="generateArtisticBtn">Générer QR artistique (fusion)</button>
+        </form>
+
+        <!-- Loader -->
+        <div id="loader" class="loader hidden"></div>
+
+        <!-- Prévisualisation -->
+        <div class="preview">
+            <canvas id="qrCanvas" width="300" height="300"></canvas>
+        </div>
+
+        <!-- Actions de téléchargement -->
+        <div class="actions">
+            <button id="downloadPngBtn" disabled>Télécharger PNG</button>
+        </div>
+
+        <!-- Lien court -->
+        <div id="shortLinkContainer" class="short-link hidden">
+            <p>Lien court :</p>
+            <input type="text" id="shortLink" readonly>
+            <button id="copyLinkBtn">Copier</button>
+        </div>
+
+        <div id="message"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

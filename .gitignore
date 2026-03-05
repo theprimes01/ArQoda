@@ -1,0 +1,30 @@
+# Environnement
+.env
+
+# Base de données
+*.db
+*.db-journal
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.envrc
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Fichiers générés (ex: QR codes téléchargés)
+qr_*.png
+qr_*.svg

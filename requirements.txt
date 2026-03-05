@@ -1,0 +1,6 @@
+Flask
+Pillow
+qrcode[pil]
+python-dotenv
+gunicorn
+psycopg2-binary

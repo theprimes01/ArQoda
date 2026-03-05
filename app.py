@@ -47,20 +47,28 @@ def get_db():
 
 def init_db():
     """Crée la table des QR codes dynamiques si elle n'existe pas."""
-    with get_db() as conn:
-        cur = conn.cursor()
-        cur.execute('''
-            CREATE TABLE IF NOT EXISTS qr_codes (
-                id SERIAL PRIMARY KEY,
-                short_code TEXT UNIQUE NOT NULL,
-                destination_url TEXT NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                scan_count INTEGER DEFAULT 0
-            )
-        ''')
-        cur.execute('CREATE INDEX IF NOT EXISTS idx_short_code ON qr_codes(short_code)')
-        conn.commit()
-
+    try:
+        with get_db() as conn:
+            cur = conn.cursor()
+            cur.execute('''
+                CREATE TABLE IF NOT EXISTS qr_codes (
+                    id SERIAL PRIMARY KEY,
+                    short_code TEXT UNIQUE NOT NULL,
+                    destination_url TEXT NOT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    scan_count INTEGER DEFAULT 0
+                )
+            ''')
+            cur.execute('CREATE INDEX IF NOT EXISTS idx_short_code ON qr_codes(short_code)')
+            conn.commit()
+    except Exception as e:
+        app.logger.error(f"Erreur lors de l'initialisation de la base : {e}")
+        # Ne pas relancer l'exception, l'application pourra peut-être fonctionner sans base ?
+        # Mais ici il vaut mieux arrêter car les QR dynamiques ne fonctionneront pas.
+        # On peut choisir de relancer ou non. Pour le diagnostic, on va logger sans planter.
+        # Cependant, si la base est indispensable, il faut que l'application plante.
+        # On va garder le raise pour l'instant, mais avec un log.
+        raise  # ← À enlever si tu veux continuer sans base (mais pas recommandé)
 # Initialiser la base au démarrage de l'application
 with app.app_context():
     init_db()

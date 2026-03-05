@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ArQoda - Générateur de QR code artistique</title>
+    <link rel="icon" href="/static/favicon.png" type="image/x-png">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
@@ -60,8 +61,11 @@
         </div>
 
         <div id="message"></div>
+        <footer class="footer">
+            <p>The primes © 2026</p>
+        </footer>
     </div>
-
+    
     <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>

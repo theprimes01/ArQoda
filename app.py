@@ -31,19 +31,23 @@ def add_security_headers(response):
 DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///qr_codes.db')
 
 def get_db():
-    """Retourne une connexion à la base de données (SQLite ou PostgreSQL)."""
-    if DATABASE_URL.startswith('sqlite'):
-        import sqlite3
-        # Format: sqlite:///chemin
-        db_path = DATABASE_URL.replace('sqlite:///', '')
-        conn = sqlite3.connect(db_path)
-        conn.row_factory = sqlite3.Row
-    else:
-        # PostgreSQL
-        import psycopg2
-        from psycopg2.extras import RealDictCursor
-        conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
-    return conn
+    """Retourne une connexion à la base de données."""
+    try:
+        if DATABASE_URL.startswith('sqlite'):
+            import sqlite3
+            db_path = DATABASE_URL.replace('sqlite:///', '')
+            conn = sqlite3.connect(db_path)
+            conn.row_factory = sqlite3.Row
+            return conn
+        else:
+            import psycopg2
+            from psycopg2.extras import RealDictCursor
+            conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
+            return conn
+    except Exception as e:
+        # En cas d'erreur de connexion, on logge et on renvoie None
+        app.logger.error(f"Erreur de connexion DB: {e}")
+        return None
 
 def init_db():
     """Crée la table des QR codes dynamiques si elle n'existe pas."""
@@ -70,8 +74,8 @@ def init_db():
         # On va garder le raise pour l'instant, mais avec un log.
         raise  # ← À enlever si tu veux continuer sans base (mais pas recommandé)
 # Initialiser la base au démarrage de l'application
-with app.app_context():
-    init_db()
+# with app.app_context():
+#    init_db()
 
 def generate_short_code(length=6):
     """Génère un code court unique."""

@@ -74,8 +74,8 @@ def init_db():
         # On va garder le raise pour l'instant, mais avec un log.
         raise  # ← À enlever si tu veux continuer sans base (mais pas recommandé)
 # Initialiser la base au démarrage de l'application
-# with app.app_context():
-#    init_db()
+with app.app_context():
+   init_db()
 
 def generate_short_code(length=6):
     """Génère un code court unique."""
